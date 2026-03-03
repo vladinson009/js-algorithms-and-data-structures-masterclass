@@ -21,7 +21,6 @@ function insertionSort(arr, comparator) {
     }
     arr[j + 1] = current;
   }
-  console.log(arr);
 
   return arr;
 }
