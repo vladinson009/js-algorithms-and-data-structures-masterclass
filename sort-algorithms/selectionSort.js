@@ -14,12 +14,16 @@ function selectionSort(arr, comparator) {
       }
     };
   }
-  for (let i = 1; i < arr.length; i++) {
-    for (let j = i; j < arr.length; j++) {
-      const isSwap = comparator(arr[i - 1], arr[j]);
+  for (let i = 0; i < arr.length; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < arr.length; j++) {
+      const isSwap = comparator(arr[minIndex], arr[j]);
       if (isSwap > 0) {
-        [arr[j], arr[i - 1]] = [arr[i - 1], arr[j]];
+        minIndex = j;
       }
+    }
+    if (i !== minIndex) {
+      [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
     }
   }
   return arr;
