@@ -1,0 +1,152 @@
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+  // ! Insert with iterative approach
+  insert(value) {
+    const newNode = new Node(value);
+
+    if (this.root === null) {
+      this.root = newNode;
+      return this;
+    }
+
+    let current = this.root;
+    //
+    while (true) {
+      if (value < current.value) {
+        //Go left
+        if (current.left === null) {
+          current.left = newNode;
+          return this;
+        }
+        current = current.left;
+      } else if (value > current.value) {
+        //Go right
+        if (current.right === null) {
+          current.right = newNode;
+          return this;
+        }
+        current = current.right;
+      } else {
+        return undefined;
+      }
+    }
+  }
+  // ! Find with recursive approach
+  find(value) {
+    const recursiveSearch = (current) => {
+      if (!current) {
+        return undefined;
+      }
+      const currentValue = current.value;
+      if (currentValue === value) {
+        return current;
+      } else if (value < currentValue) {
+        return recursiveSearch(current.left);
+      } else {
+        return recursiveSearch(current.right);
+      }
+    };
+
+    return recursiveSearch(this.root);
+  }
+  // ! Remove with recursive approach
+  remove(value) {
+    const removeNode = (node, value) => {
+      if (!node) {
+        return null;
+      }
+
+      if (value < node.value) {
+        node.left = removeNode(node.left, value);
+        return node;
+      }
+      if (value > node.value) {
+        node.right = removeNode(node.right, value);
+        return node;
+      }
+      //NODE FOUND
+      // Case 1: no children
+      if (!node.left && !node.right) {
+        return null;
+      }
+      //   Case 2: one child
+      if (!node.left) {
+        return node.right;
+      }
+      if (!node.right) {
+        return node.left;
+      }
+      // Case 3: two children
+      let successor = node.right;
+      while (successor.left) {
+        successor = successor.left;
+      }
+      node.value = successor.value;
+      node.right = removeNode(node.right, successor.value);
+      return node;
+    };
+    this.root = removeNode(this.root, value);
+    return this;
+  }
+  // ! finSecondLargest with recursive approach
+  findSecondLargest() {
+    if (!this.root || (!this.root.left && !this.root.right)) {
+      return undefined;
+    }
+    let currentLargestValue = this.root.value;
+    const secondLargest = (current) => {
+      if (currentLargestValue < current.value && current.right) {
+        currentLargestValue = current.value;
+        return secondLargest(current.right);
+      }
+      return currentLargestValue;
+    };
+
+    return secondLargest(this.root);
+  }
+  isBalanced() {
+    const height = (node) => {
+      if (!node) {
+        return 0;
+      }
+
+      const leftHeight = height(node.left);
+      const rightHeight = height(node.right);
+
+      if (leftHeight === -1 || rightHeight === -1) {
+        return -1;
+      }
+
+      if (Math.abs(leftHeight - rightHeight) > 1) {
+        return -1;
+      }
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    };
+    return height(this.root) !== -1;
+  }
+}
+var binarySearchTree = new BinarySearchTree();
+binarySearchTree.insert(15);
+binarySearchTree.insert(20);
+binarySearchTree.insert(10);
+binarySearchTree.insert(12);
+console.log(binarySearchTree.isBalanced()); // true
+
+var binarySearchTree2 = new BinarySearchTree();
+binarySearchTree2.insert(5);
+console.log(binarySearchTree2.isBalanced()); // true
+binarySearchTree2.insert(6);
+console.log(binarySearchTree2.isBalanced()); // true
+binarySearchTree2.insert(7);
+console.log(binarySearchTree2.isBalanced()); // false
