@@ -135,18 +135,104 @@ class BinarySearchTree {
     };
     return height(this.root) !== -1;
   }
+  breadthFirstSearch() {
+    const data = [];
+
+    const recursiveSearch = (queue) => {
+      if (!queue.length) {
+        return;
+      }
+      const node = queue.shift();
+      data.push(node.value);
+
+      if (node.left) {
+        queue.push(node.left);
+      }
+      if (node.right) {
+        queue.push(node.right);
+      }
+
+      recursiveSearch(queue);
+    };
+    if (this.root) {
+      recursiveSearch([this.root]);
+    }
+    return data;
+  }
+  DFSPreOrder() {
+    const data = [];
+    const preOrder = (node) => {
+      if (!node) {
+        return;
+      }
+
+      data.push(node.value);
+      if (node.left) {
+        preOrder(node.left);
+      }
+      if (node.right) {
+        preOrder(node.right);
+      }
+    };
+
+    preOrder(this.root);
+    return data;
+  }
+  DFSInOrder() {
+    const data = [];
+    const inOrder = (node) => {
+      if (!node) {
+        return;
+      }
+
+      if (node.left) {
+        inOrder(node.left);
+      }
+      data.push(node.value);
+      if (node.right) {
+        inOrder(node.right);
+      }
+    };
+
+    inOrder(this.root);
+    return data;
+  }
+  DFSPostOrder() {
+    const data = [];
+    const postOrder = (node) => {
+      if (!node) {
+        return;
+      }
+
+      if (node.left) {
+        postOrder(node.left);
+      }
+      if (node.right) {
+        postOrder(node.right);
+      }
+      data.push(node.value);
+    };
+
+    postOrder(this.root);
+    return data;
+  }
 }
 var binarySearchTree = new BinarySearchTree();
-binarySearchTree.insert(15);
-binarySearchTree.insert(20);
-binarySearchTree.insert(10);
-binarySearchTree.insert(12);
-console.log(binarySearchTree.isBalanced()); // true
+binarySearchTree
+  .insert(15)
+  .insert(20)
+  .insert(10)
+  .insert(12)
+  .insert(1)
+  .insert(5)
+  .insert(50);
+console.log(
+  binarySearchTree.DFSPreOrder(), // [15, 10, 1, 5, 12, 20, 50]
+);
 
-var binarySearchTree2 = new BinarySearchTree();
-binarySearchTree2.insert(5);
-console.log(binarySearchTree2.isBalanced()); // true
-binarySearchTree2.insert(6);
-console.log(binarySearchTree2.isBalanced()); // true
-binarySearchTree2.insert(7);
-console.log(binarySearchTree2.isBalanced()); // false
+console.log(
+  binarySearchTree.DFSInOrder(), // [1, 5, 10, 12, 15, 20, 50]
+);
+console.log(
+  binarySearchTree.DFSPostOrder(), // [5, 1, 12, 10, 50, 20, 15]
+);
